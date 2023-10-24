@@ -25,7 +25,11 @@ final class RMService {
     // (instancia de solicitação)
     ///     - completion: Callback with data or error
     // (chamada com dados ou erro)
-    public func execute(_ request: RMRequest, completion: @escaping ()  -> Void) {
+    public func execute<T: Codable> (
+        _ request: RMRequest,
+        expecting type: T.Type,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) {
         
     }
 }
