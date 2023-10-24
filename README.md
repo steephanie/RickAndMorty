@@ -4,4 +4,4 @@ Esse projeto está sendo desenvolvido para estudo e  conhecimentos gerais em Swi
 
 * A arquitetura do projeto vai ser em MVVM;
 * Não será  utilizando Storyboard;
-* Api Rick abd Morty;
+* Api Rick and Morty;
