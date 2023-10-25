@@ -7,17 +7,20 @@
 
 import UIKit
 
-// Single cell for a character (Unica celula para um personagem)
+// Cards dos personagens
 final class RMCharacterCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier = "RMCharacterCollectionViewCell"
     
+    // ajuste da imagem
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    // ajuste de label
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
@@ -26,6 +29,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    // ajuste da status
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
@@ -36,41 +40,52 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Init
     
+    //informacoes para tela
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .secondarySystemBackground
         contentView.addSubviews(imageView, nameLabel, statusLabel)
         addCostraints()
+        setUpLayer()
     }
     
     required init?(coder: NSCoder) {
         fatalError("Unsupported")
     }
     
+    //fundo do card
+    private func setUpLayer() {
+        contentView.layer.cornerRadius = 8
+        contentView.layer.shadowColor = UIColor.label.cgColor
+        contentView.layer.cornerRadius = 4
+        contentView.layer.shadowOffset = CGSize(width: -4, height: 4)
+        contentView.layer.shadowOpacity = 0.3
+    }
+    //textos
     private func addCostraints() {
         NSLayoutConstraint.activate([
-            statusLabel.heightAnchor.constraint(equalToConstant: 40),
-            nameLabel.heightAnchor.constraint(equalToConstant: 40),
+            statusLabel.heightAnchor.constraint(equalToConstant: 30),
+            nameLabel.heightAnchor.constraint(equalToConstant: 30),
             
-            statusLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
-            statusLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
-            nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5),
-            nameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5),
+            statusLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 7),
+            statusLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -7),
+            nameLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 7),
+            nameLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -7),
             
             statusLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
-            nameLabel.bottomAnchor.constraint(equalTo: statusLabel.topAnchor, constant: -3),
+            nameLabel.bottomAnchor.constraint(equalTo: statusLabel.topAnchor),
             
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             imageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             imageView.bottomAnchor.constraint(equalTo: nameLabel.topAnchor, constant:  -3),
         ])
-        
-        /*
-         | Image |
-         | Name |
-         | Status |
-         */
+    }
+    
+    // adapatação para quando tem mudanças do modo escuro ou claro de cada device.
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        setUpLayer()
     }
     
     override func prepareForReuse() {

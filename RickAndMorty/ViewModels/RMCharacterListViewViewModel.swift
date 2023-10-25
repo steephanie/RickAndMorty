@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol RMCharacterListViewViewModelDelegate: AnyObject {
+    func didLoadInitialCharacter()
+}
+
 final class RMCharacterListViewViewModel: NSObject {
+    
+    public weak var delegate: RMCharacterListViewViewModelDelegate?
     
     private var characters: [RMCharacter] = [] {
         didSet {
@@ -33,7 +39,9 @@ final class RMCharacterListViewViewModel: NSObject {
             case .success(let responseModel):
                 let results = responseModel.results
                 self?.characters = results
-                
+                DispatchQueue.main.async {
+                    self?.delegate?.didLoadInitialCharacter()
+                }
                 print("Total: "+String(responseModel.info.count))
                 print("Total result pages: "+String(responseModel.info.pages))
                 print("Page result count: "+String(responseModel.results.count))
