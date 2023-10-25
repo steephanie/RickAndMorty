@@ -7,14 +7,13 @@
 
 import UIKit
 
-/// Controller to show and search for Locations
 // Controller para mostrar e procurar localizações;
 final class RMLocationViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        //titulos da navegacoes
+        // Titulos da navegacoes
         title = "Locations"
 
     }

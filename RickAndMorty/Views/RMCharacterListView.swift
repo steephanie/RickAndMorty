@@ -7,7 +7,7 @@
 
 import UIKit
 
-/// View that handless showing list of character, loader, etc. ( visualização que mostra uma lista de personagens, carregamento, entre outros.)
+// Visualização que mostra uma lista de personagens com loading.
 final class RMCharacterListView: UIView {
     
     private let viewModel = RMCharacterListViewViewModel()
@@ -21,7 +21,7 @@ final class RMCharacterListView: UIView {
     
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .vertical    //scroll vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isHidden = true
@@ -31,8 +31,6 @@ final class RMCharacterListView: UIView {
                                 forCellWithReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier)
         return collectionView
     }()
-    
-    // MARK: Init
     
     override init(frame: CGRect) {
         super.init(frame: frame) 
