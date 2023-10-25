@@ -7,11 +7,11 @@
 
 import UIKit
 
-// Cards dos personagens;
+/// Cards dos personagens;
 final class RMCharacterCollectionViewCell: UICollectionViewCell {
     static let cellIdentifier = "RMCharacterCollectionViewCell"
     
-    // ajuste da imagem;
+    /// Ajuste da imagem;
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -20,7 +20,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
-    // ajuste de label;
+    /// Ajuste de label;
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .label
@@ -29,7 +29,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    // ajuste da status;
+    /// Ajuste da status;
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.textColor = .secondaryLabel
@@ -38,9 +38,9 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    // MARK: - CARDS, LABEL e STATUS
+    /// MARK: - CARDS, LABEL e STATUS
     
-    // informacoes para tela;
+    /// Informacoes para tela;
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .secondarySystemBackground
@@ -53,7 +53,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         fatalError("Unsupported")
     }
     
-    // fundo do card;
+    /// Fundo do card;
     private func setUpLayer() {
         contentView.layer.cornerRadius = 8
         contentView.layer.shadowColor = UIColor.label.cgColor
@@ -62,7 +62,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         contentView.layer.shadowOpacity = 0.3
     }
     
-    // definição de espaçamentos dos cards com as imagens, label e status;
+    /// Definição de espaçamentos dos cards com as imagens, label e status;
     private func addCostraints() {
         NSLayoutConstraint.activate([
             // image
@@ -85,7 +85,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
         ])
     }
     
-    // adapatação do fundo do card para quando tem mudanças do modo escuro ou claro;
+    /// Adapatação do fundo do card para quando tem mudanças do modo escuro ou claro;
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         setUpLayer()
