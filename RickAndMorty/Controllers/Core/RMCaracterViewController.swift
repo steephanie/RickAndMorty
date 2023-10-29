@@ -8,18 +8,19 @@
 import UIKit
 
 // Controller para mostrar e procurar personagens;
-final class RMCaracterViewController: UIViewController {
+final class RMCaracterViewController: UIViewController, RMCharacterListViewDelegate {
     
     private let characterListView = RMCharacterListView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Chacacters"         //titulos da navegacoes
+        title = "Characters"         //titulos da navegacoes
         setUpView()
     }
     
     private func setUpView() {
+        characterListView.delegate = self
         view.addSubview(characterListView)
         NSLayoutConstraint.activate([
             characterListView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -27,5 +28,14 @@ final class RMCaracterViewController: UIViewController {
             characterListView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor),
             characterListView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
+    }
+    
+    // MARK: RMCharacterListViewDelegate
+    func rmCharacterListView(_ characterListView: RMCharacterListView, didSelectChracter character: RMCharacter) {
+        // Aberto controller de detalhes para tal personagem.
+        let viewModel = RMCharacterDetailViewViewModel(character: character)
+        let detailVC = RMCharacterDetailViewController(viewModel: viewModel)
+        detailVC.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
