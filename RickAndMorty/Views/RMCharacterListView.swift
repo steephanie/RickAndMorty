@@ -92,4 +92,11 @@ extension RMCharacterListView: RMCharacterListViewViewModelDelegate {
             self.collectionView.alpha = 1
         }
     }
+    
+    //atualização cards personagens
+    func didLoadMoreCharacters(with newIndexPaths: [IndexPath]) {
+        collectionView.performBatchUpdates {
+            self.collectionView.insertItems(at: newIndexPaths)
+        }
+    }
 }
