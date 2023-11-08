@@ -23,6 +23,7 @@ final class RMCharacterListViewViewModel: NSObject {
     
     private var characters: [RMCharacter] = [] {
         didSet {
+            print("Creating viewModels")
             for character in characters {
                 let viewModel = RMCharacterCollectionViewCellViewModel(
                     characterName: character.name, 
@@ -56,8 +57,7 @@ final class RMCharacterListViewViewModel: NSObject {
 //                print("Total: "+String(responseModel.info.count))
 //                print("Total result pages: "+String(responseModel.info.pages))
 //                print("Page result count: "+String(responseModel.results.count))
-//                print("Example image url: "+String(responseModel.results.first?.image ?? "No image"))
-                
+ //                print("Example image url: "+String(responseModel.results.first?.image ?? "No image"))
             case .failure(let error):
                 print(String(describing: error))
             }
@@ -65,17 +65,16 @@ final class RMCharacterListViewViewModel: NSObject {
     }
     
     // Pagina se adicionado personagens necessarios
-    public func fetchAdditionalCharacter(url: URL) {
+    public func fetchAdditionalCharacters(url: URL) {
         guard !isLoadingMoreCharacters else {
             return
         }
-        
         isLoadingMoreCharacters = true
         guard let request = RMRequest(url: url) else {
             isLoadingMoreCharacters = false
             return
         }
-        
+       
         RMService.shared.execute(request, expecting: RMGetAllCharactersResponse.self) { [weak self] result in
             guard let strongSelf = self else {
                 return
@@ -85,21 +84,21 @@ final class RMCharacterListViewViewModel: NSObject {
                 let moreResults = responseModel.results
                 let info = responseModel.info
                 strongSelf.apiInfo = info
-                
+
                 let originalCount = strongSelf.characters.count
                 let newCount = moreResults.count
                 let total = originalCount+newCount
                 let startingIndex = total - newCount
-                
                 let indexPathsToAdd: [IndexPath] = Array(startingIndex..<(startingIndex+newCount)).compactMap({
                     return IndexPath(row: $0, section: 0)
                 })
-                print(indexPathsToAdd)
                 strongSelf.characters.append(contentsOf: moreResults)
+
                 DispatchQueue.main.async {
                     strongSelf.delegate?.didLoadMoreCharacters(
-                        with: []
+                        with: indexPathsToAdd
                     )
+
                     strongSelf.isLoadingMoreCharacters = false
                 }
             case .failure(let failure):
@@ -121,7 +120,7 @@ extension RMCharacterListViewViewModel: UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellViewModels.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: RMCharacterCollectionViewCell.cellIdentifier,
@@ -187,7 +186,7 @@ extension RMCharacterListViewViewModel: UIScrollViewDelegate {
             let totalScrollViewFixedHeight = scrollView.frame.size.height
             
             if offSet >= (totalContentHeight - totalScrollViewFixedHeight - 120) {
-                self?.fetchAdditionalCharacter(url: url)
+                self?.fetchAdditionalCharacters(url: url)
             }
             t.invalidate()
         }

@@ -12,7 +12,7 @@ import Foundation
 final class RMRequest {
     /// API Constants
     private struct Constants {
-        static let baseUrl = "https://rickandmortyapi.com/api/"
+        static let baseUrl = "https://rickandmortyapi.com"
     }
     
     /// Desired endpoint
@@ -28,7 +28,7 @@ final class RMRequest {
     // URL construido para solicitações em formato de string
     private var urlString: String {
         var string = Constants.baseUrl
-        string += "/"
+       // string += "/"
         string += endpoint.rawValue
         
         if !pathComponents.isEmpty {
@@ -80,8 +80,13 @@ final class RMRequest {
         if !string.contains(Constants.baseUrl) {
             return nil
         }
-        let trimmed = string.replacingOccurrences(of: Constants.baseUrl+"/", with: "")
-        if trimmed.contains("/") {
+        
+        guard let endPoint = RMEndpoint(rawValue: url.pathExtension) else {
+            return nil
+        }
+        
+        let trimmed = string.replacingOccurrences(of: Constants.baseUrl, with: "")
+        if trimmed.contains("") {
             let components = trimmed.components(separatedBy: "/")
             if !components.isEmpty {
                 let endpointString = components[0]
