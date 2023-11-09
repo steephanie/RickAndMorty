@@ -26,33 +26,40 @@ final class RMRequest {
     
     /// Constructed url for the api request in string format
     // URL construido para solicitações em formato de string
-    private var urlString: String {
-        var string = Constants.baseUrl
-       // string += "/"
-        string += endpoint.rawValue
-        
-        if !pathComponents.isEmpty {
-            pathComponents.forEach({
-                string += "/\($0)"
-            })
-        }
-        
-        if !queryParameters.isEmpty {
-            string += "?"
-            let argumentString = queryParameters.compactMap({
-                guard let value = $0.value else { return nil }
-                return "\($0.name)=\(value)"
-            }).joined(separator: "&")
-            
-            string += argumentString
-        }
-        
-        return string
-    }
+//    private var urlString: String {
+//        var string = Constants.baseUrl
+//       // string += "/"
+//        string += endpoint.rawValue
+//        
+//        if !pathComponents.isEmpty {
+//            pathComponents.forEach({
+//                string += "/\($0)"
+//            })
+//        }
+//        
+//        if !queryParameters.isEmpty {
+//            string += "?"
+//            let argumentString = queryParameters.compactMap({
+//                guard let value = $0.value else { return nil }
+//                return "\($0.name)=\(value)"
+//            }).joined(separator: "&")
+//            
+//            string += argumentString
+//        }
+//        
+//        return string
+//    }
     
     /// Computed & constructed API url
     public var url: URL? {
-        return URL(string: urlString)
+        var components = URLComponents(string: Constants.baseUrl)
+        components?.queryItems = queryParameters
+        components?.path = endpoint.rawValue
+        for pathComponent in pathComponents {
+            components?.path.append(pathComponent)
+        }
+        return components?.url
+        //return URL(string: urlString)
     }
     
     /// Desired http method
@@ -81,33 +88,35 @@ final class RMRequest {
             return nil
         }
         
-        guard let endPoint = RMEndpoint(rawValue: url.pathExtension) else {
+        guard let endpoint = RMEndpoint(rawValue: url.path()) else {
             return nil
         }
+        let queryParameters = URLComponents(url: url, resolvingAgainstBaseURL: true)?.queryItems ?? []
+        self.init(endpoint: endpoint, queryParameters: queryParameters)
+//        let trimmed = string.replacingOccurrences(of: Constants.baseUrl, with: "")
+//        if trimmed.contains("") {
+//            let components = trimmed.components(separatedBy: "/")
+//            if !components.isEmpty {
+//                let endpointString = components[0]
+//                if let rmEndpoint = RMEndpoint(
+//                    rawValue: endpointString
+//                ) {
+//                    self.init(endpoint: rmEndpoint)
+//                    return
+//                }
+//            }
         
-        let trimmed = string.replacingOccurrences(of: Constants.baseUrl, with: "")
-        if trimmed.contains("") {
-            let components = trimmed.components(separatedBy: "/")
-            if !components.isEmpty {
-                let endpointString = components[0]
-                if let rmEndpoint = RMEndpoint(
-                    rawValue: endpointString
-                ) {
-                    self.init(endpoint: rmEndpoint)
-                    return
-                }
-            }
-        } else if trimmed.contains("?") {
-            let components = trimmed.components(separatedBy: "?")
-                if !components.isEmpty {
-                    let endpointString = components[0]
-                    if let rmEndpoint = RMEndpoint(rawValue: endpointString) {
-                        self.init(endpoint: rmEndpoint)
-                        return
-                    }
-                }
-            }
-            return nil
+//        } else if trimmed.contains("?") {
+//            let components = trimmed.components(separatedBy: "?")
+//                if !components.isEmpty {
+//                    let endpointString = components[0]
+//                    if let rmEndpoint = RMEndpoint(rawValue: endpointString) {
+//                        self.init(endpoint: rmEndpoint)
+//                        return
+//                    }
+//                }
+//            }
+//            return nil
     }
 }
 
